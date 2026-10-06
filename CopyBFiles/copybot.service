@@ -1,0 +1,20 @@
+# systemd unit -> runs the bot 24/7 on a Linux VPS, restarts on crash.
+# Install:
+#   sudo cp memecoin-bot.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now memecoin-bot
+# Logs: journalctl -u memecoin-bot -f
+[Unit]
+Description=Solana copy-trading bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=botuser
+WorkingDirectory=/home/botuser/memecoin-bot
+ExecStart=/home/botuser/memecoin-bot/venv/bin/python copybot.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
